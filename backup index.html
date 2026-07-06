@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+<html lang="pl">
+<head>
+    <title>Artur Rzepecki | Arsen Portfolio</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #ff2a2a;
+            --primary-glow: rgba(255, 42, 42, 0.5);
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --glass: rgba(15, 15, 15, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Ukrywamy standardowy kursor dla efektu custom cursor */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- DYNAMICZNE TŁO --- */
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%);
+        }
+        .bg-blob {
+            position: fixed;
+            width: 500px; height: 500px;
+            background: var(--primary);
+            filter: blur(150px);
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(110%, 110%); }
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            position: fixed;
+            width: 20px; height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+
+        /* --- NAGŁÓWEK --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: transparent;
+        }
+        header h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff 30%, #444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        header p {
+            font-size: 1.2rem;
+            color: var(--primary);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        /* --- FILTRY (QOL) --- */
+        .filters {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+            padding: 10px;
+        }
+        .filter-btn {
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            border-color: var(--primary);
+        }
+
+        /* --- SIATKA PROJEKTÓW --- */
+        #main {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 50px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transform-style: preserve-3d; /* Dla efektu Tilt */
+            transition: opacity 0.5s ease;
+        }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            position: relative;
+        }
+        .card-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+        .card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .card-info {
+            padding: 25px;
+            background: linear-gradient(180deg, transparent 0%, rgba(114, 11, 11, 0.4) 100%);
+        }
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .card-desc {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            background: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* --- STOPKA --- */
+        footer {
+            padding: 100px 50px;
+            background: #000;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        .contact-info h2 { font-size: 3rem; margin-bottom: 20px; }
+        .contact-info p { font-size: 1.2rem; color: #888; }
+
+        /* --- SCROLL PROGRESS BAR --- */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0; height: 4px;
+            background: var(--primary);
+            z-index: 1000;
+            width: 0%;
+        }
+
+        @media (max-width: 768px) {
+            footer { grid-template-columns: 1fr; }
+            header h1 { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+    <div id="cursor"></div>
+    <div class="bg-gradient"></div>
+    <div class="bg-blob"></div>
+
+    <header>
+        <p>Portfolio v2.0</p>
+        <h1>ARSEN</h1>
+        <div style="margin-top: 30px;">
+            <a href="#main" class="filter-btn">Zobacz Projekty</a>
+        </div>
+    </header>
+
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterSelection('all')">Wszystko</button>
+        <button class="filter-btn" onclick="filterSelection('games')">Gry</button>
+        <button class="filter-btn" onclick="filterSelection('mods')">Modding</button>
+        <button class="filter-btn" onclick="filterSelection('3d')">Modele 3D</button>
+    </div>
+
+    <div id="main">
+        <div class="card mods" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.1">
+            <div class="card-image"><img src="images/fulls/kapkan.jpg" alt=""></div>
+            <div class="card-info">
+                <span class="badge">Garry's Mod</span>
+                <h2 class="card-title">Kapkan Tripmines</h2>
+                <p class="card-desc">Zaawansowany addon do GModa wprowadzający pułapki z R6 Siege.</p>
+                <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3520946367" class="filter-btn" style="font-size: 0.8rem;">Steam Workshop</a>
+            </div>
+        </div>
+
+        <div class="card games" data-tilt data-tilt-max="10">
+            <div class="card-image"><img src="images/thumbs/ArenaVidSmol.webp" alt=""></div>
+            <div class="card-info">
+                <span class="badge">Unity3D</span>
+                <h2 class="card-title">Arena Survivor</h2>
+                <p class="card-desc">Szybka gra akcji typu survivor stworzona w Unity.</p>
+                <a href="https://ars33n.itch.io/arena-survivor" class="filter-btn" style="font-size: 0.8rem;">Graj na Itch.io</a>
+            </div>
+        </div>
+
+        <div class="card 3d" data-tilt data-tilt-max="10">
+            <div class="card-image"><img src="images/fulls/CIDevice4k.jpg" alt=""></div>
+            <div class="card-info">
+                <span class="badge">Hard Surface</span>
+                <h2 class="card-title">Hacking Device</h2>
+                <p class="card-desc">Model urządzenia hakerskiego 4K wykonany dla serwera SCP RP.</p>
+            </div>
+        </div>
+
+        </div>
+
+    <footer id="footer">
+        <div class="contact-info">
+            <h2>Let's build something.</h2>
+            <p>Jestem otwarty na ciekawe projekty i współpracę.</p>
+        </div>
+        <div>
+            <p><i class="fa-solid fa-envelope"></i> artur.r.kontakt@gmail.com</p>
+            <p><i class="fa-brands fa-discord"></i> Discord: _arsen</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script>
+        // Custom Cursor logic
+        const cursor = document.querySelector('#cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button').forEach(link => {
+            link.addEventListener('mouseenter', () => cursor.style.transform = 'scale(2.5)');
+            link.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
+        });
+
+        // Scroll progress
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        };
+
+        // Filtrowanie
+        function filterSelection(c) {
+            var x, i;
+            x = document.getElementsByClassName("card");
+            if (c == "all") c = "";
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+                if (x[i].className.indexOf(c) > -1) {
+                    x[i].style.display = "block";
+                    // Reset Tilt after filtering
+                    VanillaTilt.init(x[i]);
+                }
+            }
+            // Update active button
+            let btns = document.querySelectorAll(".filter-btn");
+            btns.forEach(btn => btn.classList.remove("active"));
+            event.target.classList.add("active");
+        }
+
+        // Inicjalizacja Tilt na start
+        VanillaTilt.init(document.querySelectorAll(".card"), {
+            max: 10,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2,
+        });
+    </script>
+</body>
+</html>
